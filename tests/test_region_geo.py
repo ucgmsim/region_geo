@@ -46,3 +46,7 @@ def test_coastline_crs_and_bbox():
     gdf = region_geo.get_coastline(bbox=(172.0, -44.0, 173.0, -43.0), crs="EPSG:2193")
     assert gdf.crs.to_epsg() == 2193
     assert not gdf.empty
+
+
+def test_list_regions():
+    assert "nz" in region_geo.list_regions()

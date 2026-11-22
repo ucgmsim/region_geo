@@ -3,21 +3,21 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "region_geo"
-authors = [{ name = "QuakeCoRE" }]
+name = "region-geo"
+authors = [{ name = "ucgmsim" }]
 description = "Coastline geometry for a region (New Zealand by default)"
 readme = "README.md"
-requires-python = ">=3.11"
-dynamic = ["version", "dependencies"]
+license = "MIT"
+requires-python = ">=3.12"
+dynamic = ["version"]
+dependencies = ["geopandas>=1.0", "numpy", "shapely>=2.0"]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-cov", "coverage[toml]"]
+types = ["types-shapely", "pandas-stubs"]
 
-[tool.setuptools_scm]
-fallback_version = "0.1.0"
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
+[dependency-groups]
+dev = ["ruff", "deptry", "ty", "numpydoc"]
 
 [tool.setuptools.packages.find]
 include = ["region_geo*"]
@@ -27,17 +27,25 @@ include = ["region_geo*"]
 
 [tool.ruff.lint]
 extend-select = [
+  # isort imports
   "I",
+  # Use r'\s+' rather than '\s+'
   "W605",
+  # All the naming errors, like using camel case for function names.
   "N",
+  # Missing docstrings in classes, methods, and functions
   "D101",
   "D102",
   "D103",
   "D105",
   "D107",
+  # Use f-string instead of a format call
   "UP032",
+  # Standard library import is deprecated
   "UP035",
+  # Missing function argument type-annotation
   "ANN001",
+  # Using except without specifying an exception type to catch
   "BLE001",
 ]
 ignore = ["D104"]
@@ -45,11 +53,16 @@ ignore = ["D104"]
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
+[tool.ruff.lint.isort]
+known-first-party = ["region_geo"]
+
 [tool.ruff.lint.per-file-ignores]
+# Ignore docstring errors in tests folder
 "tests/**.py" = ["D"]
 
-[tool.numpydoc_validation]
-checks = [
+[tool.npdlint]
+include = ["region_geo", "scripts"]
+select = [
   "GL05",
   "GL08",
   "GL10",
@@ -65,4 +78,13 @@ checks = [
   "RT03",
   "RT04",
   "YD01",
+  "NQ",
 ]
+property-form = "type-line"
+
+[[tool.npdlint.scope]]
+match = { private = true }
+skip = true
+
+[tool.deptry]
+optional_dependencies_dev_groups = ["test", "types"]

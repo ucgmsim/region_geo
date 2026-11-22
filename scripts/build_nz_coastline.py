@@ -26,13 +26,9 @@ def build_coastline(coastline_ffp: Path) -> gpd.GeoDataFrame:
         Columns name, group, outlying in EPSG:4326
     """
     gdf = gpd.read_file(coastline_ffp)
-    outlying = gdf["grp_name"].fillna("").str.contains("|".join(OUTLYING_GROUPS))
-    out = gpd.GeoDataFrame(
-        {"name": gdf["name"], "group": gdf["grp_name"], "outlying": outlying},
-        geometry=gdf.geometry,
-        crs=gdf.crs,
-    )
-    return out.to_crs(LATLON)
+    gdf["outlying"] = gdf["grp_name"].fillna("").str.contains("|".join(OUTLYING_GROUPS))
+    gdf = gdf.rename(columns={"grp_name": "group"})
+    return gdf[["name", "group", "outlying", "geometry"]].to_crs(LATLON)
 
 
 def main():

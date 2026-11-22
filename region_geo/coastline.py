@@ -4,6 +4,7 @@ from functools import lru_cache
 
 import geopandas as gpd
 import numpy as np
+import numpy.typing as npt
 import shapely
 from shapely.geometry.base import BaseGeometry
 
@@ -107,8 +108,8 @@ def get_land(region: str | None = None, include_outlying: bool = False) -> BaseG
 
 
 def points_on_land(
-    lons: np.ndarray | list[float],
-    lats: np.ndarray | list[float],
+    lons: npt.ArrayLike,
+    lats: npt.ArrayLike,
     region: str | None = None,
     include_outlying: bool = False,
 ) -> np.ndarray:
@@ -117,9 +118,9 @@ def points_on_land(
 
     Parameters
     ----------
-    lons : np.ndarray | list[float]
+    lons : npt.ArrayLike
         Longitudes of the points
-    lats : np.ndarray | list[float]
+    lats : npt.ArrayLike
         Latitudes of the points
     region : str, optional
         Region key, by default None (uses the default region)

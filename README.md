@@ -10,6 +10,15 @@ Replaces `nzgeom` in NZGMDB.
 pip install git+https://github.com/ucgmsim/region_geo.git
 ```
 
+## Development
+
+CI uses the shared [meta-ci-action](https://github.com/ucgmsim/meta-ci-action) workflows: ruff, deptry, npdlint, ty and pytest (95% coverage). To run the same checks as git hooks:
+
+```
+uv sync --all-groups --all-extras
+uvx lefthook install
+```
+
 ## Usage
 
 ```python
