@@ -1,0 +1,1 @@
+"""Packaged region geometry files."""

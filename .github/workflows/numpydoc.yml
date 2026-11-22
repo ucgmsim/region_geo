@@ -1,0 +1,21 @@
+name: Numpydoc Lint
+
+on: pull_request
+
+jobs:
+  numpydoc-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Numpydoc Lint
+        run: |
+          pip install numpydoc
+          find region_geo scripts -name "*.py" ! -name "__init__.py" | xargs numpydoc lint

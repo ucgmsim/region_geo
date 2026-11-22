@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "region_geo"
+authors = [{ name = "QuakeCoRE" }]
+description = "Coastline geometry for a region (New Zealand by default)"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["version", "dependencies"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools_scm]
+fallback_version = "0.1.0"
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["region_geo*"]
+
+[tool.setuptools.package-data]
+"region_geo.data" = ["*.gpkg"]
+
+[tool.ruff.lint]
+extend-select = [
+  "I",
+  "W605",
+  "N",
+  "D101",
+  "D102",
+  "D103",
+  "D105",
+  "D107",
+  "UP032",
+  "UP035",
+  "ANN001",
+  "BLE001",
+]
+ignore = ["D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = ["D"]
+
+[tool.numpydoc_validation]
+checks = [
+  "GL05",
+  "GL08",
+  "GL10",
+  "PR01",
+  "PR02",
+  "PR03",
+  "PR04",
+  "PR05",
+  "PR06",
+  "PR07",
+  "RT01",
+  "RT02",
+  "RT03",
+  "RT04",
+  "YD01",
+]
