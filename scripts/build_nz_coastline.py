@@ -1,14 +1,19 @@
 """Build the packaged NZ coastline file from the LINZ coastline and islands polygons."""
 
-import argparse
 from pathlib import Path
+from typing import Annotated
 
 import geopandas as gpd
+import typer
+
+from qcore import cli
+from region_geo import LATLON, get_region
+
+app = typer.Typer(pretty_exceptions_enable=False)
 
 # Coastline groups that sit across 180 degrees and are left out by default
 OUTLYING_GROUPS = ("Chatham", "Kermadec")
-LATLON = "EPSG:4326"
-OUTPUT_FFP = Path(__file__).parents[1] / "region_geo" / "data" / "nz_coastline.gpkg"
+OUTPUT_FFP = get_region("nz").coastline_path
 
 
 def build_coastline(coastline_ffp: Path) -> gpd.GeoDataFrame:
@@ -31,18 +36,26 @@ def build_coastline(coastline_ffp: Path) -> gpd.GeoDataFrame:
     return gdf[["name", "group", "outlying", "geometry"]].to_crs(LATLON)
 
 
-def main():
-    """Build the NZ coastline file."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("coastline", type=Path, help="LINZ coastline gpkg")
-    parser.add_argument("--output", type=Path, default=OUTPUT_FFP)
-    args = parser.parse_args()
+@cli.from_docstring(app)
+def build_nz_coastline(
+    coastline_ffp: Annotated[Path, typer.Argument(exists=True, dir_okay=False)],
+    output_ffp: Annotated[Path, typer.Option(dir_okay=False)] = OUTPUT_FFP,
+):
+    """
+    Build the NZ coastline file.
 
-    gdf = build_coastline(args.coastline)
-    args.output.unlink(missing_ok=True)
-    gdf.to_file(args.output, driver="GPKG", layer="coastline")
-    print(f"{args.output}: {len(gdf)} polygons")
+    Parameters
+    ----------
+    coastline_ffp : Path
+        LINZ nz-coastlines-and-islands-polygons-topo-150k file
+    output_ffp : Path, optional
+        Output GeoPackage, by default the packaged region_geo/data/nz_coastline.gpkg
+    """
+    gdf = build_coastline(coastline_ffp)
+    output_ffp.unlink(missing_ok=True)
+    gdf.to_file(output_ffp, driver="GPKG", layer="coastline")
+    print(f"{output_ffp}: {len(gdf)} polygons")
 
 
 if __name__ == "__main__":
-    main()
+    app()

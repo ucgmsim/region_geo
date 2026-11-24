@@ -15,9 +15,13 @@ dependencies = ["geopandas>=1.0", "numpy", "shapely>=2.0"]
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov", "coverage[toml]"]
 types = ["types-shapely", "pandas-stubs"]
+# Only needed to rebuild the packaged data with scripts/
+scripts = ["qcore-utils[cli]>=2026.10.1", "typer"]
 
 [dependency-groups]
 dev = ["ruff", "deptry", "ty", "numpydoc"]
+
+[tool.setuptools_scm]
 
 [tool.setuptools.packages.find]
 include = ["region_geo*"]
@@ -54,7 +58,7 @@ ignore = ["D104"]
 convention = "numpy"
 
 [tool.ruff.lint.isort]
-known-first-party = ["region_geo"]
+known-first-party = ["region_geo", "qcore"]
 
 [tool.ruff.lint.per-file-ignores]
 # Ignore docstring errors in tests folder

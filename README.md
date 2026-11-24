@@ -61,6 +61,7 @@ Same result on 5000 random points across NZ, about twice as fast. The merged lan
 Coastline files are GeoPackages in EPSG:4326 with columns `name`, `group`, `outlying`. Rebuild the NZ file with:
 
 ```
+uv sync --extra scripts
 python scripts/build_nz_coastline.py nz-coastlines-and-islands-polygons-topo-150k.gpkg
 ```
 
