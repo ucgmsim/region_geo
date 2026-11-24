@@ -12,6 +12,11 @@ requires-python = ">=3.12"
 dynamic = ["version"]
 dependencies = ["geopandas>=1.0", "numpy", "shapely>=2.0"]
 
+[project.urls]
+Homepage = "https://github.com/ucgmsim/region_geo"
+Repository = "https://github.com/ucgmsim/region_geo"
+Issues = "https://github.com/ucgmsim/region_geo/issues"
+
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov", "coverage[toml]"]
 types = ["types-shapely", "pandas-stubs"]
