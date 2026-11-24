@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "region-geo"
+authors = [{ name = "ucgmsim" }]
+description = "Coastline geometry for a region (New Zealand by default)"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dynamic = ["version"]
+dependencies = ["geopandas>=1.0", "numpy", "shapely>=2.0"]
+
+[project.urls]
+Homepage = "https://github.com/ucgmsim/region_geo"
+Repository = "https://github.com/ucgmsim/region_geo"
+Issues = "https://github.com/ucgmsim/region_geo/issues"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov", "coverage[toml]"]
+types = ["types-shapely", "pandas-stubs"]
+# Only needed to rebuild the packaged data with scripts/
+scripts = ["qcore-utils[cli]>=2026.10.1", "typer"]
+
+[dependency-groups]
+dev = ["ruff", "deptry", "ty", "numpydoc"]
+
+[tool.setuptools_scm]
+
+[tool.setuptools.packages.find]
+include = ["region_geo*"]
+
+[tool.setuptools.package-data]
+"region_geo.data" = ["*.gpkg"]
+
+[tool.ruff.lint]
+extend-select = [
+  # isort imports
+  "I",
+  # Use r'\s+' rather than '\s+'
+  "W605",
+  # All the naming errors, like using camel case for function names.
+  "N",
+  # Missing docstrings in classes, methods, and functions
+  "D101",
+  "D102",
+  "D103",
+  "D105",
+  "D107",
+  # Use f-string instead of a format call
+  "UP032",
+  # Standard library import is deprecated
+  "UP035",
+  # Missing function argument type-annotation
+  "ANN001",
+  # Using except without specifying an exception type to catch
+  "BLE001",
+]
+ignore = ["D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+known-first-party = ["region_geo", "qcore"]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore docstring errors in tests folder
+"tests/**.py" = ["D"]
+
+[tool.npdlint]
+include = ["region_geo", "scripts"]
+select = [
+  "GL05",
+  "GL08",
+  "GL10",
+  "PR01",
+  "PR02",
+  "PR03",
+  "PR04",
+  "PR05",
+  "PR06",
+  "PR07",
+  "RT01",
+  "RT02",
+  "RT03",
+  "RT04",
+  "YD01",
+  "NQ",
+]
+property-form = "type-line"
+
+[[tool.npdlint.scope]]
+match = { private = true }
+skip = true
+
+[tool.deptry]
+optional_dependencies_dev_groups = ["test", "types"]
